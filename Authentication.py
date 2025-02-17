@@ -1,4 +1,5 @@
 import pyrebase
+import re
 
 firebaseConfig = {
 
@@ -16,3 +17,27 @@ firebaseConfig = {
 
   "measurementId": "G-HP8LXVM2ME"}
 
+def sing_up():
+  email = input("please enter your email: ")
+
+  password = input("please enter a password")
+
+  if len(password)>=8 and re.search("[A-Z]", password) and re.search("[a-z]", password) and re.search("[0-9]", password) and re.search("[^A-Za-z0-9]", password):
+    return True
+    #check if password is at least 8 characters long
+  if len(password) < 8:
+    return False
+    #check if password contains at least one uppercase letter
+  if not re.search("[A-Z]", password):
+    return False
+    #check if password contains at least one lowercase letter
+  if not re.search("[a-z]", password):
+    return False
+    #check if password contains at least one digit
+  if not re.search("[0-9]", password):
+    return False
+    #check if password contains at least one special character
+  if not re.search("[^A-Za-z0-9]", password):
+    return False
+  
+  return auth.create_user_with_email_and_password(email, password)
