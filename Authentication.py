@@ -16,8 +16,11 @@ firebaseConfig = {
   "appId": "1:280182390752:web:637d7d746129658fb27585",
 
   "measurementId": "G-HP8LXVM2ME"}
+firebase = pyrebase.initialize_app(firebaseConfig)
+
 
 def sing_up():
+  auth = firebase.auth()
   email = input("please enter your email: ")
 
   password = input("please enter a password")
@@ -40,4 +43,20 @@ def sing_up():
   if not re.search("[^A-Za-z0-9]", password):
     return False
   
-  return auth.create_user_with_email_and_password(email, password)
+  try:
+    auth.create_user_with_email_and_password(email, password)
+    print("User created successfully")
+  except Exception as e:
+    print("Error: ", str(e))
+  
+  
+ 
+
+def log_in():
+  auth = firebase.auth()
+  email = input("please enter your email: ")
+  password = input("please enter your password: ")
+  try:
+    auth.sign_in_with_email_and_password(email, password)
+  except Exception as e:
+    print("Error: ", str(e))
