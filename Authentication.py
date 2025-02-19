@@ -1,5 +1,6 @@
 import pyrebase
 import re
+import click
 
 firebaseConfig = {
 
@@ -18,10 +19,16 @@ firebaseConfig = {
   "measurementId": "G-HP8LXVM2ME",
   "databaseURL": ""}
 firebase = pyrebase.initialize_app(firebaseConfig)
+auth = firebase.auth()
+db = firebase.database()
 
-
+@click.command()
+@click.option('--email', prompt='Email', help='Email to use for signup')
+@click.option('--passowrd', prompt= True, hide_input = True, confirmation_prompt = True, help='Password to use for signup')
+@click.option('--name', prompt='full name', help='Name to use for signup')
+@click.option('--role', type=click.Choice(['peer or mentor']), prompt ='role', help='Role to use for signup')
 def sign_up():
-  auth = firebase.auth()
+  
   name = input("please enter your name: ")
   role = input("please enter your role(mentor/peer): ").lower()
 
@@ -29,7 +36,7 @@ def sign_up():
         print("Invalid role. Please enter 'mentor' or 'peer'.")
         return
 
-  db = firebase.database()
+  
   email = input("please enter your email: ")
   password = input("please enter a password: ")
 
@@ -63,11 +70,14 @@ def sign_up():
     
     db.child("users").child(uid).push(user_data, user["idToken"])
 
-    print("User created successfully")
+    click.echo("User created successfully")
   except Exception as e:
-    print("Error: ", str(e)) 
- 
+    click.echo("Error: ", str(e)) 
 
+ 
+@click.command()
+@click.option('--username', prompt='email', help='enter your email')
+@click.option('--password', prompt=True, hide_input = True, confirmation_promp = True, help='enter your password')
 def log_in():
     auth = firebase.auth()
     email = input("Please enter your email: ")
@@ -75,18 +85,21 @@ def log_in():
     
     try:
         auth.sign_in_with_email_and_password(email, password)
-        print("Login successful! Welcome,", email)
+        click.echo("Login successful! Welcome,", email)
     except Exception as e:
-        print("Error: Incorrect password or email.", str(e))
+        click.echo("Error: Incorrect password or email.", str(e))
 
+
+@click.command()
+@click.option('--forgot password', prompt='email', help='enter your email')
 def forgot_password():
   auth = firebase.auth()
   email = input("Please enter your email: ")
   try:
     auth.send_password_reset_email(f"email:{email}")
-    print("Password reset email sent to your email")
+    click.echo("Password reset email sent to your email")
   except Exception as e:
-      print("Error: ", str(e))
+      click.echo("Error: ", str(e))
 
 
 if __name__ == "__main__":
