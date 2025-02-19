@@ -68,7 +68,7 @@ def sign_up():
                 "role": role,
                 "email": email}
     
-    db.child("users").child(uid).push(user_data, user["idToken"])
+    db.child("users").child(uid).set(user_data, user["idToken"])
 
     click.echo("User created successfully")
   except Exception as e:
