@@ -27,10 +27,12 @@ db = firebase.database()
 @click.option('--passowrd', prompt= True, hide_input = True, confirmation_prompt = True, help='Password to use for signup')
 @click.option('--name', prompt='full name', help='Name to use for signup')
 @click.option('--role', type=click.Choice(['peer or mentor']), prompt ='role', help='Role to use for signup')
+@click.option("--expertise", prompt="Expertise (if mentor)", default="", help="Enter expertise (optional for peers)")
 def sign_up():
   
-  name = input("please enter your name: ")
+  name = input("please enter your name: ").capitalize()
   role = input("please enter your role(mentor/peer): ").lower()
+  expertise = input("what do you expertise in: ").lower()
 
   if role not in ["mentor", "peer"]:
         print("Invalid role. Please enter 'mentor' or 'peer'.")
@@ -66,7 +68,8 @@ def sign_up():
     uid = user["localId"]
     user_data = {"name": name,
                 "role": role,
-                "email": email}
+                "email": email,
+                "expertise": expertise}
     
     db.child("users").child(uid).set(user_data, user["idToken"])
 
