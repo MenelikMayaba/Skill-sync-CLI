@@ -13,8 +13,8 @@ def request_meeting(mentor_id, time):
         return
     
     mentee_id = current_user['localId']
-    meeting_data = {'mentor id':mentor_id,
-                    'mentee id': mentee_id,
+    meeting_data = {'mentor_id':mentor_id,
+                    'mentee_id': mentee_id,
                     'time': time,
                     'status': 'pending'}
     #send the request to the mentor
@@ -29,7 +29,7 @@ def view_bookins():
         click.echo("you need to login first")
         return
     
-    bookings = db.child('meetings').order_by_child('mentee id').equal_to(current_user['localId']).get()
+    bookings = db.child('meetings').order_by_child('mentee_id').equal_to(current_user['localId']).get()
     click.echo('\n your bookins: ')
 
     for booking in bookings.each():

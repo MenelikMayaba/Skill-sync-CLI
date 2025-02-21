@@ -109,19 +109,5 @@ def forgot_password():
   except Exception as e:
       click.echo("Error: ", str(e))
 
-
-if __name__ == "__main__":
-    while True:
-        choice = input("\n1. Sign Up\n2. Log In\n 3, forgot password?\n4. Exit\nChoose an option: ")
-        if choice == "1":
-          sign_up()
-        elif choice == "2":
-          log_in()
-        elif choice == "3":
-          forgot_password()
-        elif choice == "4":
-          print("Exiting program.")
-          break
-        else:
-            print("Invalid option, please try again.")
+    
 
