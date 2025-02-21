@@ -22,6 +22,8 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firebase.database()
 
+current_user= 0
+
 @click.command()
 @click.option('--email', prompt='Email', help='Email to use for signup')
 @click.option('--passowrd', prompt= True, hide_input = True, confirmation_prompt = True, help='Password to use for signup')
@@ -65,6 +67,7 @@ def sign_up():
   
   try:
     user = auth.create_user_with_email_and_password(email, password)
+  
     uid = user["localId"]
     user_data = {"name": name,
                 "role": role,
@@ -82,12 +85,14 @@ def sign_up():
 @click.option('--username', prompt='email', help='enter your email')
 @click.option('--password', prompt=True, hide_input = True, confirmation_promp = True, help='enter your password')
 def log_in():
+    global current_user
     auth = firebase.auth()
     email = input("Please enter your email: ")
     password = input("Please enter your password: ")
     
     try:
-        auth.sign_in_with_email_and_password(email, password)
+        user = auth.sign_in_with_email_and_password(email, password)
+        current_user = user
         click.echo("Login successful! Welcome,", email)
     except Exception as e:
         click.echo("Error: Incorrect password or email.", str(e))
