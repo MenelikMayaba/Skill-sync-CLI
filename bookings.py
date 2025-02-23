@@ -1,5 +1,6 @@
 from Authentication import *
 from peer_mentor import *
+from calender_api import authenticate_google_calendar, create_event
 
 
 @click.command()
@@ -20,6 +21,17 @@ def request_meeting(mentor_id, time):
     #send the request to the mentor
     db.child('meetings').push(meeting_data)
     click.echo("Meeting Request Sent")
+    # Send the request to the mentor
+    db.child('meetings').push(meeting_data)
+    
+    # Create a Google Calendar event
+    service = authenticate_google_calendar()
+    start_time = f"{time}:00"
+    end_time = f"{time}:00"  # Assuming a 1-hour meeting
+    timezone = "UTC"
+    event_link = create_event(service, "Mentor Meeting", start_time, end_time, timezone, attendees=[current_user['email']])
+    
+    click.echo(f"Meeting Request Sent. Google Calendar event created: {event_link}")
 
 @click.command()
 def view_bookins():
