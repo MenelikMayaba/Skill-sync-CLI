@@ -101,6 +101,9 @@ def forgot_password():
     click.echo("Password reset email sent to your email")
   except Exception as e:
       click.echo(f"Error: {str(e)}")
+<<<<<<< HEAD
 
     
 
+=======
+>>>>>>> ca9695974f983be365a0e057172b4fb85ed842ac
