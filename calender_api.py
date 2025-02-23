@@ -28,3 +28,19 @@ def authenticate_google_calendar():
             json.dump(creds.to_json(), token)
     
     return build('calendar', 'v3', credentials=creds)
+
+def create_event(service, summary, start_time, end_time, timezone, attendees=None):
+    event = {
+        'summary': summary,
+        'start': {
+            'dateTime': start_time,
+            'timeZone': timezone,
+        },
+        'end': {
+            'dateTime': end_time,
+            'timeZone': timezone,
+        },
+        'attendees': attendees if attendees else [],
+    }
+    event = service.events().insert(calendarId='primary', body=event).execute()
+    return event.get('htmlLink')
