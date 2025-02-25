@@ -1,23 +1,29 @@
 from Authentication import *
 
-@click.command()
-def view_mentors():
+def view_mentors(current_user):
+    if not current_user:
+        print("You need to log in first.")
+        return
+    
     try:
-        mentor = db.child('user').order_by_child('role').equal_to('mentor').get()
-        click.echo('\n avaiable mentors: ')
-        for mentor in mentor.each():
-            click.echo(f"{mentor.val()['name']} (expertise: {mentor.val()['expertise']})")
+        id_token = current_user['idToken']
+        mentors = db.child('users').order_by_child('role').equal_to('mentor').get(token=id_token)
+        print('\nAvailable mentors:')
+        for mentor in mentors.each():
+            print(f"{mentor.val()['name']} (expertise: {mentor.val()['expertise']})")
     except Exception as e:
-        click.echo(f"Error fetching mentor: {e}")
+        print(f"Error fetching mentors: {e}")
 
 
-@click.command()
-def view_peers():
+def view_peers(current_user):
+    if not current_user:
+        print("You need to log in first.")
+        return
     try:
-        peer = db.child('user').order_by_child('role').equal_to('peer').get()
-        click.echo('\n available peers: ')
-        for peer in peer.each():
-            click.echo(f"{peer.val()['name']} (expertise: {peer.val()['expertise']}")
+        id_token = current_user['idToken']
+        peers = db.child('users').order_by_child('role').equal_to('peer').get(token=id_token)
+        print('\n available peers: ')
+        for peer in peers.each():
+            print(f"{peer.val()['name']} (expertise: {peer.val()['expertise']}")
     except Exception as e:
-        click.echo(f"Error fetching peer: {e}")
-
+        print(f"Error fetching peer: {e}")
