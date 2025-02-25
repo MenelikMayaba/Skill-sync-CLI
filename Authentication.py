@@ -64,7 +64,7 @@ def sign_up(name, email, password, role, expertise):
         click.echo("User created successfully")
     except Exception as e:
         # Handle any errors that occur during user creation
-        click.echo(f"Error: str{e}") 
+        click.echo(f"Error: {str(e)}") 
 
 @click.command()
 @click.option('--username', prompt='email', help='enter your email')
@@ -108,11 +108,8 @@ def forgot_password(email):
     """
     auth = firebase.auth()
     
-    # Get the email address from the user
-    email = input("Please enter your email: ")
-    
     try:
-        auth.send_password_reset_email(f"email:{email}")
+        auth.send_password_reset_email(email)
         click.echo("Password reset email sent to your email")
     except Exception as e:
         click.echo(f"Error: {str(e)}")
