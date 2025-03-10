@@ -4,6 +4,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+import click
 
 # If modifying these SCOPES, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
@@ -27,9 +28,12 @@ def authenticate_google_calendar():
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
     
-    return build('calendar', 'v3', credentials=creds)
+    return creds
 
-def create_event(service, summary, start_time, end_time, timezone, attendees=None):
+def create_event(summary, start_time, end_time, timezone, attendees=None):
+    creds = authenticate_google_calendar()
+    service= build('calendar', 'v3', credentials=creds)
+
     event = {
         'summary': summary,
         'start': {
@@ -43,4 +47,5 @@ def create_event(service, summary, start_time, end_time, timezone, attendees=Non
         'attendees': [{'email': attendee} for attendee in attendees] if isinstance(attendees, list) else attendees,
     }
     event = service.events().insert(calendarId='primary', body=event).execute()
-    return event.get('htmlLink')
+    click.echo(f"event created: {event.get('htmlLink')}")
+    return event.get('id')
