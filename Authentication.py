@@ -25,6 +25,26 @@ db = firebase.database()
 @click.option('--role', type=click.Choice(['peer', 'mentor']), prompt='role', help='Role to use for signup')
 @click.option("--expertise", prompt="Expertise (if mentor)", default="", help="Enter expertise (optional for peers)")
 def sign_up(name, email, password, role, expertise):
+    """
+Command-line interface for user signup.
+
+Prompts the user for email, password, full name, role, and expertise (if applicable)
+to create a new user account. Validates the password against specific criteria and
+ensures the role is either 'mentor' or 'peer'. If validation passes, it creates a
+user in the authentication system and stores user data in the database. Displays
+a success message upon successful user creation or an error message if an exception
+occurs.
+
+Parameters:
+    name (str): Full name of the user.
+    email (str): Email address for the user account.
+    password (str): Password for the user account.
+    role (str): Role of the user, either 'peer' or 'mentor'.
+    expertise (str): Expertise of the user, required if the role is 'mentor'.
+
+Raises:
+    Exception: If an error occurs during user creation.
+"""
     # Check if the role is valid
     if role not in ["mentor", "peer"]:
         print("Invalid role. Please enter 'mentor' or 'peer'.")
@@ -40,7 +60,7 @@ def sign_up(name, email, password, role, expertise):
     if not re.search("[a-z]", password):
         print("Password must contain lowercase letter")
         return
-    if not re.search("[0-9]", password):
+    if not re.search("\d", password):
         print("Password must contain digit")
         return
     if not re.search("[^A-Za-z0-9]", password):

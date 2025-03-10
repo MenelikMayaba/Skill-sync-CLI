@@ -5,6 +5,13 @@ import click
 
 @click.group()
 def cli():
+    """
+Defines the main command group for the CLI application.
+
+This function serves as the entry point for the command-line interface,
+allowing the addition of various subcommands related to user authentication,
+peer mentoring, and meeting bookings.
+"""
     pass
 
 cli.add_command(sign_up)

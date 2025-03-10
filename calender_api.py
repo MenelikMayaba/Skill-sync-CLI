@@ -10,6 +10,19 @@ import click
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 def authenticate_google_calendar():
+    """
+Authenticates and returns Google Calendar API credentials.
+
+This function checks for existing credentials stored in 'token.json'.
+If valid credentials are found, they are loaded; otherwise, it initiates
+an OAuth2 flow to obtain new credentials. If the credentials are expired
+but have a refresh token, they are refreshed. New credentials are saved
+to 'token.json' for future use.
+
+Returns:
+    google.oauth2.credentials.Credentials: The authenticated credentials
+    for accessing the Google Calendar API.
+"""
     creds = None
     if os.path.exists('token.json'):
         with open('token.json', 'r') as token:

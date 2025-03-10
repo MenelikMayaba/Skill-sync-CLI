@@ -45,7 +45,7 @@ def request_meeting(mentor_id, time, current_user):
         timezone = "RSA/cape_town"
         
         attendees = [{'email': current_user['email']}]
-        event_link = create_event(service, "Mentor Meeting", start_time, end_time, timezone, attendees)
+        event_link = create_event(service, start_time, end_time, timezone, attendees)
         click.echo(f"Meeting Request Sent. Google Calendar event created: {event_link}")
     except Exception as e:
         click.echo(f"Meeting Request Sent, but calendar creation failed: {str(e)}")
@@ -53,6 +53,22 @@ def request_meeting(mentor_id, time, current_user):
 @click.command()
 @click.option('--current-user', required=True, help='Current logged-in user')
 def view_bookings(current_user):
+    """
+Command-line interface command to view bookings for the current user.
+
+This command retrieves and displays all bookings associated with the
+currently logged-in user from the Firebase database. It requires the
+user to be logged in and provides details such as meeting ID, mentor ID,
+time, and status for each booking. If an error occurs during retrieval,
+an error message is displayed.
+
+Parameters:
+    current_user (dict): The current logged-in user's information, 
+    including their unique local ID.
+
+Raises:
+    Exception: If there is an error retrieving bookings from the database.
+"""
     if not current_user:
         click.echo("You need to log in first.")
         return
@@ -69,6 +85,22 @@ def view_bookings(current_user):
 @click.option("--meeting-id", prompt="Meeting ID", help="Enter the Meeting ID to cancel")
 @click.option('--current-user', required=True, help='Current logged-in user')
 def cancel_booking(meeting_id, current_user):
+    """
+Cancels a booking for a meeting.
+
+This command-line function allows a user to cancel a meeting by providing
+the meeting ID. It verifies that the current user is logged in and is the
+owner of the meeting before proceeding with the cancellation. If the meeting
+is successfully canceled, a confirmation message is displayed. Otherwise,
+appropriate error messages are shown.
+
+Parameters:
+    meeting_id (str): The ID of the meeting to be canceled.
+    current_user (dict): The currently logged-in user information.
+
+Raises:
+    Exception: If an error occurs during the cancellation process.
+"""
     if not current_user:
         click.echo("You need to log in first.")
         return
